@@ -36,21 +36,38 @@ public class NetworkOperator {
 		return this;
 	}
 
-	public void getFanpageInfo(
+	public void getFanpageInfoHot(
 			Response.Listener<JSONObject> responseSuccessListener,
 			Response.ErrorListener responseErrorListener) {
 
-		MyGetRequest request = new MyGetRequest(context, Constants.FANPAGE_URL,
-				null, responseSuccessListener, responseErrorListener);
+		MyGetRequest request = new MyGetRequest(context,
+				Constants.FANPAGE_URL_HOT, null, responseSuccessListener,
+				responseErrorListener);
 		requestQueue.add(request);
 	}
 
-	public void getInfo(Response.Listener<JSONObject> responseSuccessListener,
+	public void getFanpageInfoTech(
+			Response.Listener<JSONObject> responseSuccessListener,
 			Response.ErrorListener responseErrorListener) {
 
+		MyGetRequest request = new MyGetRequest(context,
+				Constants.FANPAGE_URL_TECH, null, responseSuccessListener,
+				responseErrorListener);
+		requestQueue.add(request);
+	}
+
+	public void getNewFeedHot(int limit,
+			Response.Listener<JSONObject> responseSuccessListener,
+			Response.ErrorListener responseErrorListener) {
+
+		String params = "select object_id,caption,src_big,like_info,comment_info,created,link FROM photo WHERE owner = '"
+				+ Constants.FANPAGE_KEY_HOT + "'  LIMIT " + limit;
+
 		String endpoint = "";
+
 		try {
-			endpoint = url + URLEncoder.encode(Constants.QUERY_INFO, "UTF-8");
+			endpoint = url + URLEncoder.encode(params, "UTF-8");
+			Log.e("ENDPOINT", endpoint);
 			MyGetRequest request = new MyGetRequest(context, endpoint, null,
 					responseSuccessListener, responseErrorListener);
 			requestQueue.add(request);
@@ -60,12 +77,12 @@ public class NetworkOperator {
 		}
 	}
 
-	public void getNewFeed(int limit,
+	public void getNewFeedTech(int limit,
 			Response.Listener<JSONObject> responseSuccessListener,
 			Response.ErrorListener responseErrorListener) {
 
-		String params = "select object_id,caption,src_big,like_info,comment_info,created,link FROM photo WHERE owner = '598340546886173'  LIMIT "
-				+ limit;
+		String params = "select object_id,caption,src_big,like_info,comment_info,created,link FROM photo WHERE owner = '"
+				+ Constants.FANPAGE_KEY_TECH + "'  LIMIT " + limit;
 
 		String endpoint = "";
 

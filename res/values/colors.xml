@@ -16,6 +16,7 @@
     <color name="gray_line">#AAAAAA</color>
     <color name="pin_progress_default_circle_color">#80ffffff</color>
     <color name="pin_progress_default_progress_color">#33b5e5</color>
+    <color name="gray_bg">#e4e4e4</color>
 
     <drawable name="ab_bg_black">#aa000000</drawable>
 
@@ -27,6 +28,6 @@
     <color name="chat_user_text_color">#727272</color>
     <color name="yellows">#E5F512</color>
     <color name="gray">#EAEAEA</color>
-    <color name="app_color">#950a11</color>
+    <color name="app_color">#7e3794</color>
 
 </resources>

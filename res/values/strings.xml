@@ -26,5 +26,7 @@
     <string name="ok">Ok</string>
     <string name="novote">Do not show again</string>
     <string name="later">Later</string>
+    <string name="news">Tin tức hot</string>
+    <string name="tech">Tin công nghệ</string>
 
 </resources>

@@ -74,6 +74,7 @@ public class GameFragment extends Fragment {
 				intent.putExtra("DES", item.getMessage());
 				intent.putExtra("TITME", item.getTime());
 				intent.putExtra("POST_ID", item.getPost_id());
+				intent.putExtra("POS", 4);
 				startActivity(intent);
 			}
 		});

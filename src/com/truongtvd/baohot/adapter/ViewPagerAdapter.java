@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import com.truongtvd.baohot.R;
+import com.truongtvd.baohot.fragment.BBCFragment;
 import com.truongtvd.baohot.fragment.EntertainmentFragment;
 import com.truongtvd.baohot.fragment.GameFragment;
 import com.truongtvd.baohot.fragment.NewsFragment;
@@ -25,7 +26,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 				context.getString(R.string.tech),
 				context.getString(R.string.sports),
 				context.getString(R.string.entertaiment),
-				context.getString(R.string.game) };
+				context.getString(R.string.game),
+				context.getString(R.string.bbc) };
 	}
 
 	Fragment fragment;
@@ -49,6 +51,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 		} else if (position == 4) {
 			GameFragment gameFragment = (GameFragment) object;
 			gameFragment.init();
+		} else if (position == 5) {
+			BBCFragment bbcFragment = (BBCFragment) object;
+			bbcFragment.init();
 		}
 
 	}
@@ -72,6 +77,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 			break;
 		case 4:
 			fragment = new GameFragment();
+			break;
+		case 5:
+			fragment = new BBCFragment();
 			break;
 		default:
 			break;

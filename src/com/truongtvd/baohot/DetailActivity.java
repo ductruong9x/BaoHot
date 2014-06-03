@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -32,8 +33,9 @@ public class DetailActivity extends SherlockFragmentActivity {
 	private ViewPager vpMain;
 	private PagerSlidingTabStrip mIndicator;
 	private ViewPagerDetailAdapter adapter;
-	private ProgressDialog dialog;
-	private String link, title, des, image;
+	private ProgressDialog dialog, dialoglike;
+	private String link, title, des, image, post_id;
+	private int pos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +52,15 @@ public class DetailActivity extends SherlockFragmentActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		dialog = new ProgressDialog(this);
 		dialog.setMessage("Sharing...");
+		dialoglike = new ProgressDialog(this);
+		dialoglike.setMessage("Like...");
 		Intent intent = getIntent();
 		link = intent.getStringExtra("LINK");
 		title = intent.getStringExtra("TITLE");
 		des = intent.getStringExtra("DES");
 		image = intent.getStringExtra("IMAGE");
+		pos = intent.getIntExtra("POS", 0);
+		post_id = intent.getStringExtra("POST_ID");
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
 		mIndicator = (PagerSlidingTabStrip) findViewById(R.id.indicatorTabHome);
 		mIndicator.setBackgroundResource(R.color.app_color);
@@ -66,6 +72,44 @@ public class DetailActivity extends SherlockFragmentActivity {
 		vpMain.setCurrentItem(0);
 		mIndicator.setAllCaps(false);
 		mIndicator.setViewPager(vpMain);
+
+		if (pos == 0) {
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color
+					.parseColor("#7e3794")));
+			mIndicator.setBackgroundResource(R.color.app_color);
+			actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
+					+ getString(R.string.news) + "</font>"));
+		} else if (pos == 1) {
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color
+					.parseColor("#008aa7")));
+			mIndicator.setBackgroundResource(R.color.color_tech);
+			actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
+					+ getString(R.string.tech) + "</font>"));
+		} else if (pos == 2) {
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color
+					.parseColor("#508416")));
+			mIndicator.setBackgroundResource(R.color.color_sport);
+			actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
+					+ getString(R.string.sports) + "</font>"));
+		} else if (pos == 3) {
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color
+					.parseColor("#ef6c00")));
+			mIndicator.setBackgroundResource(R.color.color_entertaiment);
+			actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
+					+ getString(R.string.entertaiment) + "</font>"));
+		} else if (pos == 4) {
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color
+					.parseColor("#e04b28")));
+			mIndicator.setBackgroundResource(R.color.color_game);
+			actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
+					+ getString(R.string.game) + "</font>"));
+		} else if (pos == 5) {
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color
+					.parseColor("#4f42d4")));
+			mIndicator.setBackgroundResource(R.color.color_bbc);
+			actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
+					+ getString(R.string.bbc) + "</font>"));
+		}
 
 	}
 
@@ -133,6 +177,50 @@ public class DetailActivity extends SherlockFragmentActivity {
 
 			RequestAsyncTask task = new RequestAsyncTask(request);
 			task.execute();
+
+			break;
+
+		case R.id.menu_like:
+
+			try {
+				if (!Session.getActiveSession().getPermissions()
+						.contains("publish_actions")) {
+					NewPermissionsRequest requestlike = new NewPermissionsRequest(
+							DetailActivity.this,
+							Arrays.asList("publish_actions"));
+					requestlike.setCallback(new StatusCallback() {
+
+						@Override
+						public void call(Session session, SessionState state,
+								Exception exception) {
+							// TODO Auto-generated method stub
+
+						}
+					});
+
+					Session.getActiveSession().requestNewPublishPermissions(
+							requestlike);
+					return true;
+				}
+			} catch (Exception e) {
+
+			}
+			dialoglike.show();
+
+			Request.Callback callbacklike = new Request.Callback() {
+				public void onCompleted(Response response) {
+					Log.e("LIKE", response.toString());
+					dialoglike.dismiss();
+					Toast.makeText(DetailActivity.this, "Like successfuly	",
+							Toast.LENGTH_SHORT).show();
+				}
+			};
+
+			Request requestlike = new Request(Session.getActiveSession(),
+					post_id + "/likes", null, HttpMethod.POST, callbacklike);
+
+			RequestAsyncTask tasklike = new RequestAsyncTask(requestlike);
+			tasklike.execute();
 
 			break;
 		}

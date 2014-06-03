@@ -73,6 +73,7 @@ public class EntertainmentFragment extends Fragment {
 				intent.putExtra("DES", item.getMessage());
 				intent.putExtra("TITME", item.getTime());
 				intent.putExtra("POST_ID", item.getPost_id());
+				intent.putExtra("POS", 3);
 				startActivity(intent);
 			}
 		});

@@ -1,15 +1,27 @@
 package com.truongtvd.baohot;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Html;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Session;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.truongtvd.baohot.adapter.ViewPagerAdapter;
 import com.viewpagerindicator.PagerSlidingTabStrip;
 
@@ -19,6 +31,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private PagerSlidingTabStrip mIndicator;
 	private ViewPagerAdapter adapter;
 	private ActionBar actionBar;
+	private AdView adView;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -31,6 +44,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color
 				.parseColor("#7e3794")));
 		actionBar.setIcon(R.drawable.ic_actionbar);
+		adView = (AdView) findViewById(R.id.ad);
+		adView.loadAd(new AdRequest());
+
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
 		mIndicator = (PagerSlidingTabStrip) findViewById(R.id.indicatorTabHome);
 
@@ -40,6 +56,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		adapter = new ViewPagerAdapter(MainActivity.this,
 				getSupportFragmentManager());
 		vpMain.setAdapter(adapter);
+		vpMain.setOffscreenPageLimit(6);
 		vpMain.setCurrentItem(0);
 
 		mIndicator.setAllCaps(false);
@@ -88,6 +105,13 @@ public class MainActivity extends SherlockFragmentActivity {
 					actionBar.setTitle(Html
 							.fromHtml("<font color='#ffffff' size='25'>"
 									+ getString(R.string.game) + "</font>"));
+				} else if (pos == 5) {
+					actionBar.setBackgroundDrawable(new ColorDrawable(Color
+							.parseColor("#4f42d4")));
+					mIndicator.setBackgroundResource(R.color.color_bbc);
+					actionBar.setTitle(Html
+							.fromHtml("<font color='#ffffff' size='25'>"
+									+ getString(R.string.bbc) + "</font>"));
 				}
 			}
 
@@ -153,4 +177,99 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		getSupportMenuInflater().inflate(R.menu.menu, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+
+		case R.id.invate:
+			sendRequestDialog();
+			Toast.makeText(MainActivity.this, "Invate friend from Facebook",
+					Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.rate:
+			Toast.makeText(MainActivity.this, "Thank you", Toast.LENGTH_SHORT)
+					.show();
+			Intent goToMarket = new Intent(Intent.ACTION_VIEW).setData(Uri
+					.parse("market://details?id=" + getPackageName()));
+			startActivity(goToMarket);
+			break;
+		case R.id.devinfo:
+			Intent goMoreApp = new Intent(Intent.ACTION_VIEW)
+					.setData(Uri
+							.parse("https://play.google.com/store/apps/developer?id=Appvn+Software"));
+			startActivity(goMoreApp);
+			break;
+
+		default:
+			break;
+		}
+
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+	private void sendRequestDialog() {
+		Bundle params = new Bundle();
+		params.putString("message", "Đọc Báo mới hàng ngày");
+
+		WebDialog requestsDialog = (new WebDialog.RequestsDialogBuilder(
+				MainActivity.this, Session.getActiveSession(), params))
+				.setOnCompleteListener(new OnCompleteListener() {
+
+					@Override
+					public void onComplete(Bundle values,
+							FacebookException error) {
+						if (error != null) {
+							if (error instanceof FacebookOperationCanceledException) {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Request cancelled", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Network Error", Toast.LENGTH_SHORT)
+										.show();
+							}
+						} else {
+							final String requestId = values
+									.getString("request");
+							if (requestId != null) {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Request sent", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+								Toast.makeText(
+										MainActivity.this
+												.getApplicationContext(),
+										"Request cancelled", Toast.LENGTH_SHORT)
+										.show();
+							}
+						}
+					}
+
+				}).build();
+		requestsDialog.show();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		if (adView != null) {
+			adView.destroy();
+		}
+		super.onDestroy();
+	}
 }

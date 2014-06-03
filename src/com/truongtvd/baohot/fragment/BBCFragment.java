@@ -6,23 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-
 import com.facebook.HttpMethod;
 import com.facebook.Request;
-import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.Request.GraphUserCallback;
 import com.facebook.model.GraphUser;
 import com.truongtvd.baohot.DetailActivity;
 import com.truongtvd.baohot.MyApplication;
@@ -33,7 +21,18 @@ import com.truongtvd.baohot.network.NetworkOperator;
 import com.truongtvd.baohot.util.JsonUtils;
 import com.truongtvd.baomoi.common.Constants;
 
-public class NewsFragment extends Fragment {
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class BBCFragment extends Fragment {
 	private View mParent;
 	private NetworkOperator operator;
 	private Session session;
@@ -73,7 +72,7 @@ public class NewsFragment extends Fragment {
 				intent.putExtra("DES", item.getMessage());
 				intent.putExtra("TITME", item.getTime());
 				intent.putExtra("POST_ID", item.getPost_id());
-				intent.putExtra("POS", 0);
+				intent.putExtra("POS", 5);
 				startActivity(intent);
 			}
 		});
@@ -85,7 +84,7 @@ public class NewsFragment extends Fragment {
 			return;
 		}
 
-		getIDUser();
+		// getIDUser();
 		getNewFeed(limit);
 		check = true;
 	}
@@ -141,7 +140,7 @@ public class NewsFragment extends Fragment {
 
 	private void getNewFeed(int limit) {
 		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
-				+ Constants.FANPAGE_KEY_HOT + "' LIMIT " + limit;
+				+ Constants.FANPAGE_KEY_BBC + "' LIMIT " + limit;
 		Bundle params = new Bundle();
 		params.putString("q", fqlQuery);
 
@@ -170,4 +169,5 @@ public class NewsFragment extends Fragment {
 		Request.executeBatchAsync(request);
 
 	}
+
 }

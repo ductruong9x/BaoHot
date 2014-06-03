@@ -68,6 +68,7 @@ public class TechFragment extends Fragment {
 				intent.putExtra("IMAGE", item.getImage());
 				intent.putExtra("DES", item.getMessage());
 				intent.putExtra("TITME", item.getTime());
+				intent.putExtra("POS", 1);
 				startActivity(intent);
 			}
 		});

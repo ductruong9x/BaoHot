@@ -11,12 +11,15 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.truongtvd.baohot.R;
 import com.truongtvd.baohot.network.MyVolley;
 import com.truongtvd.baohot.util.Util;
@@ -35,6 +38,7 @@ public class DetailFragment extends Fragment {
 	private WebView webDetail;
 	private ProgressBar loading;
 	private LinearLayout layout_web;
+	private AdView adView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class DetailFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		mParent = inflater.inflate(R.layout.detail_activity, null);
+		adView = (AdView) mParent.findViewById(R.id.adDetail);
+		adView.loadAd(new AdRequest());
 		tvTitle = (TextView) mParent.findViewById(R.id.tvTitle);
 		tvTime = (TextView) mParent.findViewById(R.id.tvTime);
 		tvDes = (TextView) mParent.findViewById(R.id.tvDes);
@@ -82,6 +88,9 @@ public class DetailFragment extends Fragment {
 				layout_web.setVisibility(View.VISIBLE);
 				webDetail.getSettings().setJavaScriptEnabled(true);
 				webDetail.loadUrl(link);
+//				if (adView != null) {
+//					adView.destroy();
+//				}
 			}
 		});
 		return mParent;
@@ -99,5 +108,14 @@ public class DetailFragment extends Fragment {
 			super.onProgressChanged(view, newProgress);
 		}
 
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		if (adView != null) {
+			adView.destroy();
+		}
+		super.onDestroy();
 	}
 }

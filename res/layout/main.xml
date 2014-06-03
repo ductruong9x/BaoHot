@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -13,7 +13,19 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/vpMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ad"
+        android:layout_below="@+id/indicatorTabHome" >
     </android.support.v4.view.ViewPager>
 
-</LinearLayout>
+    <com.google.ads.AdView
+        xmlns:app="http://schemas.android.com/apk/lib/com.google.ads"
+        android:id="@+id/ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="ca-app-pub-6063844612770322/7095420890"
+        app:refreshInterval="30" />
+
+</RelativeLayout>

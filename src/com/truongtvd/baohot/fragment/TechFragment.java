@@ -92,6 +92,7 @@ public class TechFragment extends Fragment {
 		Request request = new Request(session, "/fql", params, HttpMethod.GET,
 				new Request.Callback() {
 					public void onCompleted(Response response) {
+						try{
 						JSONObject jso = JsonUtils.parseResponToJson(response);
 						// Util.writetoFile(jso.toString(), "TUVI");
 						loading.setVisibility(View.GONE);
@@ -103,7 +104,9 @@ public class TechFragment extends Fragment {
 						// // Log.e("LIST_SIZE", listItem.size() + "");
 
 						// Log.e("NEW", jso.toString());
+						} catch (Exception e) {
 
+						}
 					}
 				});
 		Request.executeBatchAsync(request);

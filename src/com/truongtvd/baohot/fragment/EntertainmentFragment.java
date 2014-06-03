@@ -148,18 +148,22 @@ public class EntertainmentFragment extends Fragment {
 		Request request = new Request(session, "/fql", params, HttpMethod.GET,
 				new Request.Callback() {
 					public void onCompleted(Response response) {
-						JSONObject jso = JsonUtils.parseResponToJson(response);
-						// Util.writetoFile(jso.toString(), "TUVI");
-						loading.setVisibility(View.GONE);
-						listnew = JsonUtils.getListItem(jso, listnew);
-						adapter = new ItemAdapter(getActivity(),
-								R.layout.item_layout, listnew);
-						// lvListNew.addHeaderView(header);
-						lvListNew.setAdapter(adapter);
-						// // Log.e("LIST_SIZE", listItem.size() + "");
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+							// Util.writetoFile(jso.toString(), "TUVI");
+							loading.setVisibility(View.GONE);
+							listnew = JsonUtils.getListItem(jso, listnew);
+							adapter = new ItemAdapter(getActivity(),
+									R.layout.item_layout, listnew);
+							// lvListNew.addHeaderView(header);
+							lvListNew.setAdapter(adapter);
+							// // Log.e("LIST_SIZE", listItem.size() + "");
 
-						// Log.e("NEW", jso.toString());
+							// Log.e("NEW", jso.toString());
+						} catch (Exception e) {
 
+						}
 					}
 				});
 		Request.executeBatchAsync(request);

@@ -12,7 +12,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         android:layout_toRightOf="@+id/view"
-        android:background="@drawable/popup_bg"
+        android:background="@drawable/popup_bg_comment"
         android:orientation="vertical" >
 
         <TextView

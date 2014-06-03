@@ -28,5 +28,10 @@
     <string name="later">Later</string>
     <string name="news">Tin tức hot</string>
     <string name="tech">Tin công nghệ</string>
+    <string name="detail">Chi tiết</string>
+    <string name="comment">Bình luận</string>
+    <string name="sports">Thể thao</string>
+    <string name="entertaiment">Giải trí</string>
+    <string name="game">Tin Game</string>
 
 </resources>

@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.facebook.Response;
 import com.facebook.model.GraphObject;
 import com.truongtvd.baohot.model.CommentInfo;
@@ -31,24 +34,58 @@ public class JsonUtils {
 			JSONArray data = json.getJSONArray("data");
 			ItemNewFeed item;
 			for (int i = 0; i < data.length(); i++) {
-				JSONObject content = data.getJSONObject(i);
 				item = new ItemNewFeed();
-				String message = content.getString("caption");
-				item.setMessage(message + "");
+				JSONObject content = data.getJSONObject(i);
+				JSONObject attachment = content.getJSONObject("attachment");
+				boolean mediacheck = attachment.has("media");
+				if (mediacheck == false) {
+					continue;
+				}
+
 				JSONObject like_info = content.getJSONObject("like_info");
 				if (like_info.has("like_count")) {
 					item.setLike_count(like_info.getInt("like_count"));
 				}
-				JSONObject comment_info = content.getJSONObject("comment_info");
-				if (comment_info.has("comment_count")) {
-					item.setComment_count(comment_info.getInt("comment_count"));
+				item.setTime(content.getInt("created_time"));
+				item.setPost_id(content.getString("post_id") + "");
+
+				if (attachment.has("media")) {
+					JSONArray mediaArray = attachment.getJSONArray("media");
+					if (mediaArray.length() == 0) {
+						continue;
+					}
+					if (mediaArray.length() > 0) {
+						JSONObject media = mediaArray.getJSONObject(0);
+						if (media.has("src")) {
+							item.setImage(media.getString("src"));
+						}
+						if (media.has("href")) {
+							item.setLink(media.getString("href"));
+						}
+
+					}
+
 				}
-				item.setLink(content.getString("link"));
-				item.setTime(content.getInt("created"));
-				item.setPost_id(content.getString("object_id") + "");
-				item.setImage(content.getString("src_big"));
+
+				if (attachment.has("description")) {
+					String des = attachment.getString("description") + "";
+					if (TextUtils.isEmpty(des)) {
+						continue;
+					} else {
+						item.setMessage(des);
+					}
+				}
+				if (attachment.has("name")) {
+					String name = attachment.getString("name") + "";
+					if (TextUtils.isEmpty(name)) {
+						continue;
+					} else {
+						item.setName(name);
+					}
+
+				}
+
 				list.add(item);
-				Collections.shuffle(list);
 
 			}
 

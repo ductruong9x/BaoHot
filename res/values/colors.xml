@@ -29,5 +29,9 @@
     <color name="yellows">#E5F512</color>
     <color name="gray">#EAEAEA</color>
     <color name="app_color">#7e3794</color>
+    <color name="color_tech">#008aa7</color>
+    <color name="color_sport">#508416</color>
+    <color name="color_entertaiment">#ef6c00</color>
+    <color name="color_game">#e04b28</color>
 
 </resources>

@@ -9,6 +9,15 @@ public class ItemNewFeed {
 	private int like_count;
 	private int comment_count;
 	private String link;
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getLink() {
 		return link;

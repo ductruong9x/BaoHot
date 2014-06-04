@@ -34,5 +34,6 @@
     <string name="entertaiment">Giải trí</string>
     <string name="game">Tin Game</string>
     <string name="bbc">BBCVietnamese</string>
+    <string name="backclick">Ấn back lần nữa để thoát</string>
 
 </resources>

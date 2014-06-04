@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Html;
@@ -271,5 +272,23 @@ public class MainActivity extends SherlockFragmentActivity {
 			adView.destroy();
 		}
 		super.onDestroy();
+	}
+	private boolean backPressedToExitOnce = false;
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		if (backPressedToExitOnce) {
+			super.onBackPressed();
+		} else {
+			this.backPressedToExitOnce = true;
+			Toast.makeText(MainActivity.this, getString(R.string.backclick),
+					Toast.LENGTH_SHORT).show();
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					backPressedToExitOnce = false;
+				}
+			}, 3000);
+		}
 	}
 }

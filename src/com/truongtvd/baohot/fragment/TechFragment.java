@@ -1,6 +1,7 @@
 package com.truongtvd.baohot.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONObject;
 
@@ -79,7 +80,8 @@ public class TechFragment extends Fragment {
 		if (check) {
 			return;
 		}
-		getNewFeed(limit);
+		//getNewFeed(limit);
+		getNewFeedGenK(70);
 		check = true;
 	}
 
@@ -93,18 +95,67 @@ public class TechFragment extends Fragment {
 		Request request = new Request(session, "/fql", params, HttpMethod.GET,
 				new Request.Callback() {
 					public void onCompleted(Response response) {
-						try{
-						JSONObject jso = JsonUtils.parseResponToJson(response);
-						// Util.writetoFile(jso.toString(), "TUVI");
-						loading.setVisibility(View.GONE);
-						listnew = JsonUtils.getListItem(jso, listnew);
-						adapter = new ItemTechAdapter(getActivity(),
-								R.layout.item_layout, listnew);
-						// lvListNew.addHeaderView(header);
-						lvListNew.setAdapter(adapter);
-						// // Log.e("LIST_SIZE", listItem.size() + "");
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+							// Util.writetoFile(jso.toString(), "TUVI");
+							loading.setVisibility(View.GONE);
+							listnew = JsonUtils.getListItem(jso, listnew);
+							Collections.shuffle(listnew);
+							adapter = new ItemTechAdapter(getActivity(),
+									R.layout.item_layout, listnew);
+							lvListNew.setAdapter(adapter);
+							// Log.e("NEW", jso.toString());
+						} catch (Exception e) {
 
-						// Log.e("NEW", jso.toString());
+						}
+					}
+				});
+		Request.executeBatchAsync(request);
+
+	}
+
+	private void getNewFeedGenK(int limit) {
+		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
+				+ "186426311375329" + "' LIMIT " + limit;
+		Bundle params = new Bundle();
+		params.putString("q", fqlQuery);
+
+		// session = Session.getActiveSession();
+		Request request = new Request(session, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+							listnew = JsonUtils.getListItem(jso, listnew);
+
+							getNewFeedVNreView(70);
+						} catch (Exception e) {
+
+						}
+					}
+				});
+		Request.executeBatchAsync(request);
+
+	}
+
+	private void getNewFeedVNreView(int limit) {
+		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
+				+ "426544150717102" + "' LIMIT " + limit;
+		Bundle params = new Bundle();
+		params.putString("q", fqlQuery);
+
+		// session = Session.getActiveSession();
+		Request request = new Request(session, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+							// Util.writetoFile(jso.toString(), "TUVI");
+							listnew = JsonUtils.getListItem(jso, listnew);
+							getNewFeed(70);
 						} catch (Exception e) {
 
 						}

@@ -86,11 +86,11 @@ public class DetailFragment extends Fragment {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				layout_web.setVisibility(View.VISIBLE);
-				webDetail.getSettings().setJavaScriptEnabled(true);
+				// webDetail.getSettings().setJavaScriptEnabled(true);
 				webDetail.loadUrl(link);
-//				if (adView != null) {
-//					adView.destroy();
-//				}
+				// if (adView != null) {
+				// adView.destroy();
+				// }
 			}
 		});
 		return mParent;

@@ -1,6 +1,7 @@
 package com.truongtvd.baohot.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,7 @@ public class NewsFragment extends Fragment {
 	private View mParent;
 	private NetworkOperator operator;
 	private Session session;
-	private int limit = 300;
+	private int limit = 70;
 	private boolean check = false;
 	private ListView lvListNew;
 	private ItemAdapter adapter;
@@ -86,7 +87,7 @@ public class NewsFragment extends Fragment {
 		}
 
 		getIDUser();
-		getNewFeed(limit);
+		getNewFeedDanTri(limit);
 		check = true;
 	}
 
@@ -155,13 +156,61 @@ public class NewsFragment extends Fragment {
 							// Util.writetoFile(jso.toString(), "TUVI");
 							loading.setVisibility(View.GONE);
 							listnew = JsonUtils.getListItem(jso, listnew);
+							Collections.shuffle(listnew);
 							adapter = new ItemAdapter(getActivity(),
 									R.layout.item_layout, listnew);
-							// lvListNew.addHeaderView(header);
 							lvListNew.setAdapter(adapter);
-							// // Log.e("LIST_SIZE", listItem.size() + "");
-
 							// Log.e("NEW", jso.toString());
+						} catch (Exception e) {
+
+						}
+					}
+				});
+		Request.executeBatchAsync(request);
+
+	}
+
+	private void getNewFeedVNexpress(int limit) {
+		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
+				+ "262700667105773" + "' LIMIT " + limit;
+		Bundle params = new Bundle();
+		params.putString("q", fqlQuery);
+
+		// session = Session.getActiveSession();
+		Request request = new Request(session, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+							listnew = JsonUtils.getListItem(jso, listnew);
+							getNewFeed(70);
+						} catch (Exception e) {
+
+						}
+					}
+				});
+		Request.executeBatchAsync(request);
+
+	}
+
+	private void getNewFeedDanTri(int limit) {
+		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
+				+ "604923616218501" + "' LIMIT " + limit;
+		Bundle params = new Bundle();
+		params.putString("q", fqlQuery);
+
+		// session = Session.getActiveSession();
+		Request request = new Request(session, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+
+							listnew = JsonUtils.getListItem(jso, listnew);
+
+							getNewFeedVNexpress(70);
 						} catch (Exception e) {
 
 						}

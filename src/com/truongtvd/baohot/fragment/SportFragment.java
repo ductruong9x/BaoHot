@@ -1,6 +1,7 @@
 package com.truongtvd.baohot.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,57 +87,9 @@ public class SportFragment extends Fragment {
 		}
 
 		// getIDUser();
-		getNewFeed(limit);
+		// getNewFeed(limit);
+		getNewFeedVNexpress(70);
 		check = true;
-	}
-
-	private void getIDUser() {
-		Request request = Request.newMeRequest(session,
-				new GraphUserCallback() {
-
-					@Override
-					public void onCompleted(GraphUser user, Response response) {
-						// TODO Auto-generated method stub
-						try {
-							getUserInfo(user.getId());
-						} catch (Exception e) {
-
-						}
-					}
-				});
-		Request.executeBatchAsync(request);
-	}
-
-	private void getUserInfo(String id) {
-		String fqlQuery = "SELECT name,pic FROM user WHERE uid='" + id + "'";
-		Bundle params = new Bundle();
-		params.putString("q", fqlQuery);
-
-		// session = Session.getActiveSession();
-		Request request = new Request(session, "/fql", params, HttpMethod.GET,
-				new Request.Callback() {
-					public void onCompleted(Response response) {
-						JSONObject jso = JsonUtils.parseResponToJson(response);
-						try {
-							JSONArray data = jso.getJSONArray("data");
-							if (data.length() > 0) {
-								JSONObject info = data.getJSONObject(0);
-								MyApplication.setAvater(info.getString("pic"));
-								MyApplication.setName(info.getString("name"));
-								// getNewFeed(limit);
-							}
-
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-						// Log.e("USER_INFO", jso.toString());
-
-					}
-				});
-		Request.executeBatchAsync(request);
-
 	}
 
 	private void getNewFeed(int limit) {
@@ -155,13 +108,37 @@ public class SportFragment extends Fragment {
 							// Util.writetoFile(jso.toString(), "TUVI");
 							loading.setVisibility(View.GONE);
 							listnew = JsonUtils.getListItem(jso, listnew);
+							Collections.shuffle(listnew);
 							adapter = new ItemAdapter(getActivity(),
 									R.layout.item_layout, listnew);
-							// lvListNew.addHeaderView(header);
 							lvListNew.setAdapter(adapter);
-							// // Log.e("LIST_SIZE", listItem.size() + "");
 
 							// Log.e("NEW", jso.toString());
+						} catch (Exception e) {
+
+						}
+					}
+				});
+		Request.executeBatchAsync(request);
+
+	}
+
+	private void getNewFeedVNexpress(int limit) {
+		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
+				+ Constants.FANPAGE_KEY_SPORT + "' LIMIT " + limit;
+		Bundle params = new Bundle();
+		params.putString("q", fqlQuery);
+
+		// session = Session.getActiveSession();
+		Request request = new Request(session, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+
+							listnew = JsonUtils.getListItem(jso, listnew);
+							getNewFeed(70);
 						} catch (Exception e) {
 
 						}

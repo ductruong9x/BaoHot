@@ -2,6 +2,7 @@ package com.truongtvd.baohot.fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +89,7 @@ public class SportFragment extends Fragment {
 
 		// getIDUser();
 		// getNewFeed(limit);
-		getNewFeedVNexpress(70);
+		getNewFeedVNexpress(100);
 		check = true;
 	}
 
@@ -109,6 +110,24 @@ public class SportFragment extends Fragment {
 							loading.setVisibility(View.GONE);
 							listnew = JsonUtils.getListItem(jso, listnew);
 							Collections.shuffle(listnew);
+							Collections.sort(listnew, new Comparator<ItemNewFeed>() {
+
+								@Override
+								public int compare(ItemNewFeed item1,
+										ItemNewFeed item2) {
+									if(item1.getTime()<item2.getTime()){
+										return 1;
+									}else{
+										if (item1.getTime() == item2.getTime()) {
+					                        return 0;
+					                    } else {
+					                        return -1;
+					                    }
+										
+									}
+								}
+							});
+							
 							adapter = new ItemAdapter(getActivity(),
 									R.layout.item_layout, listnew);
 							lvListNew.setAdapter(adapter);
@@ -138,7 +157,7 @@ public class SportFragment extends Fragment {
 									.parseResponToJson(response);
 
 							listnew = JsonUtils.getListItem(jso, listnew);
-							getNewFeed(70);
+							getNewFeed(100);
 						} catch (Exception e) {
 
 						}

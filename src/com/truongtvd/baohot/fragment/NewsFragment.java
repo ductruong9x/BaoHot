@@ -2,6 +2,7 @@ package com.truongtvd.baohot.fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +39,7 @@ public class NewsFragment extends Fragment {
 	private View mParent;
 	private NetworkOperator operator;
 	private Session session;
-	private int limit = 70;
+	private int limit = 40;
 	private boolean check = false;
 	private ListView lvListNew;
 	private ItemAdapter adapter;
@@ -157,6 +158,27 @@ public class NewsFragment extends Fragment {
 							loading.setVisibility(View.GONE);
 							listnew = JsonUtils.getListItem(jso, listnew);
 							Collections.shuffle(listnew);
+							Collections.sort(listnew,
+									new Comparator<ItemNewFeed>() {
+
+										@Override
+										public int compare(ItemNewFeed item1,
+												ItemNewFeed item2) {
+											if (item1.getTime() < item2
+													.getTime()) {
+												return 1;
+											} else {
+												if (item1.getTime() == item2
+														.getTime()) {
+													return 0;
+												} else {
+													return -1;
+												}
+
+											}
+										}
+									});
+
 							adapter = new ItemAdapter(getActivity(),
 									R.layout.item_layout, listnew);
 							lvListNew.setAdapter(adapter);
@@ -184,7 +206,7 @@ public class NewsFragment extends Fragment {
 							JSONObject jso = JsonUtils
 									.parseResponToJson(response);
 							listnew = JsonUtils.getListItem(jso, listnew);
-							getNewFeed(70);
+							getNewFeed(40);
 						} catch (Exception e) {
 
 						}
@@ -193,6 +215,8 @@ public class NewsFragment extends Fragment {
 		Request.executeBatchAsync(request);
 
 	}
+
+	
 
 	private void getNewFeedDanTri(int limit) {
 		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
@@ -210,7 +234,7 @@ public class NewsFragment extends Fragment {
 
 							listnew = JsonUtils.getListItem(jso, listnew);
 
-							getNewFeedVNexpress(70);
+							getNewFeedVNexpress(40);
 						} catch (Exception e) {
 
 						}

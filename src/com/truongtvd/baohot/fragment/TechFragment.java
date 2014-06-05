@@ -2,6 +2,7 @@ package com.truongtvd.baohot.fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 import org.json.JSONObject;
 
@@ -80,8 +81,8 @@ public class TechFragment extends Fragment {
 		if (check) {
 			return;
 		}
-		//getNewFeed(limit);
-		getNewFeedGenK(70);
+		// getNewFeed(limit);
+		getNewFeedGenK(40);
 		check = true;
 	}
 
@@ -102,8 +103,27 @@ public class TechFragment extends Fragment {
 							loading.setVisibility(View.GONE);
 							listnew = JsonUtils.getListItem(jso, listnew);
 							Collections.shuffle(listnew);
+							Collections.sort(listnew, new Comparator<ItemNewFeed>() {
+
+								@Override
+								public int compare(ItemNewFeed item1,
+										ItemNewFeed item2) {
+									if(item1.getTime()<item2.getTime()){
+										return 1;
+									}else{
+										if (item1.getTime() == item2.getTime()) {
+					                        return 0;
+					                    } else {
+					                        return -1;
+					                    }
+										
+									}
+								}
+							});
+							
 							adapter = new ItemTechAdapter(getActivity(),
 									R.layout.item_layout, listnew);
+							
 							lvListNew.setAdapter(adapter);
 							// Log.e("NEW", jso.toString());
 						} catch (Exception e) {
@@ -130,7 +150,7 @@ public class TechFragment extends Fragment {
 									.parseResponToJson(response);
 							listnew = JsonUtils.getListItem(jso, listnew);
 
-							getNewFeedVNreView(70);
+							getNewFeedVNreView(40);
 						} catch (Exception e) {
 
 						}
@@ -155,7 +175,7 @@ public class TechFragment extends Fragment {
 									.parseResponToJson(response);
 							// Util.writetoFile(jso.toString(), "TUVI");
 							listnew = JsonUtils.getListItem(jso, listnew);
-							getNewFeed(70);
+							getNewFeed(40);
 						} catch (Exception e) {
 
 						}
@@ -164,4 +184,5 @@ public class TechFragment extends Fragment {
 		Request.executeBatchAsync(request);
 
 	}
+	
 }

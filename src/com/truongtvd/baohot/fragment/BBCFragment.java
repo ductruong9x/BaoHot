@@ -36,7 +36,7 @@ public class BBCFragment extends Fragment {
 	private View mParent;
 	private NetworkOperator operator;
 	private Session session;
-	private int limit = 300;
+	private int limit = 200;
 	private boolean check = false;
 	private ListView lvListNew;
 	private ItemAdapter adapter;

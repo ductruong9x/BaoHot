@@ -39,7 +39,7 @@ public class NewsFragment extends Fragment {
 	private View mParent;
 	private NetworkOperator operator;
 	private Session session;
-	private int limit = 40;
+	private int limit = 30;
 	private boolean check = false;
 	private ListView lvListNew;
 	private ItemAdapter adapter;
@@ -182,7 +182,7 @@ public class NewsFragment extends Fragment {
 							adapter = new ItemAdapter(getActivity(),
 									R.layout.item_layout, listnew);
 							lvListNew.setAdapter(adapter);
-							// Log.e("NEW", jso.toString());
+							 Log.e("NEW", jso.toString());
 						} catch (Exception e) {
 
 						}
@@ -206,7 +206,32 @@ public class NewsFragment extends Fragment {
 							JSONObject jso = JsonUtils
 									.parseResponToJson(response);
 							listnew = JsonUtils.getListItem(jso, listnew);
-							getNewFeed(40);
+							getNewFeedTin247(30);
+							Log.e("NEW", jso.toString());
+						} catch (Exception e) {
+
+						}
+					}
+				});
+		Request.executeBatchAsync(request);
+
+	}
+	private void getNewFeedTin247(int limit) {
+		String fqlQuery = "SELECT post_id, message, attachment,created_time,like_info FROM stream WHERE source_id = '"
+				+ "772006936162917" + "' LIMIT " + limit;
+		Bundle params = new Bundle();
+		params.putString("q", fqlQuery);
+
+		// session = Session.getActiveSession();
+		Request request = new Request(session, "/fql", params, HttpMethod.GET,
+				new Request.Callback() {
+					public void onCompleted(Response response) {
+						try {
+							JSONObject jso = JsonUtils
+									.parseResponToJson(response);
+							listnew = JsonUtils.getListItem(jso, listnew);
+							getNewFeed(30);
+							 Log.e("NEW", jso.toString());
 						} catch (Exception e) {
 
 						}
@@ -233,8 +258,8 @@ public class NewsFragment extends Fragment {
 									.parseResponToJson(response);
 
 							listnew = JsonUtils.getListItem(jso, listnew);
-
-							getNewFeedVNexpress(40);
+							 Log.e("NEW", jso.toString());
+							getNewFeedVNexpress(30);
 						} catch (Exception e) {
 
 						}

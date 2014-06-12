@@ -16,6 +16,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.RequestAsyncTask;
@@ -24,6 +26,8 @@ import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.truongtvd.baohot.adapter.ViewPagerDetailAdapter;
 import com.viewpagerindicator.PagerSlidingTabStrip;
 
@@ -128,56 +132,33 @@ public class DetailActivity extends SherlockFragmentActivity {
 			finish();
 			break;
 		case R.id.menu_share:
-
-			try {
-				if (!Session.getActiveSession().getPermissions()
-						.contains("publish_actions")) {
-					NewPermissionsRequest request = new NewPermissionsRequest(
-							DetailActivity.this,
-							Arrays.asList("publish_actions"));
-					request.setCallback(new StatusCallback() {
-
-						@Override
-						public void call(Session session, SessionState state,
-								Exception exception) {
-							// TODO Auto-generated method stub
-
-						}
-					});
-
-					Session.getActiveSession().requestNewPublishPermissions(
-							request);
-					return true;
-				}
-			} catch (Exception e) {
-
-			}
-			dialog.show();
-			Bundle postParams = new Bundle();
-			postParams.putString("name", title);
-			postParams
-					.putString(
-							"message",
-							"Link tải ứng dụng Báo Hót cho Android: "
-									+ "https://play.google.com/store/apps/details?id=com.truongtvd.baohot");
-			postParams.putString("description", des);
-			postParams.putString("picture", image);
-			postParams.putString("link", link);
-
-			Request.Callback callback = new Request.Callback() {
-				public void onCompleted(Response response) {
-					dialog.dismiss();
-					Toast.makeText(DetailActivity.this, "Share successfuly	",
-							Toast.LENGTH_SHORT).show();
-				}
-			};
-
-			Request request = new Request(Session.getActiveSession(),
-					"me/feed", postParams, HttpMethod.POST, callback);
-
-			RequestAsyncTask task = new RequestAsyncTask(request);
-			task.execute();
-
+//
+//			try {
+//				if (!Session.getActiveSession().getPermissions()
+//						.contains("publish_actions")) {
+//					NewPermissionsRequest request = new NewPermissionsRequest(
+//							DetailActivity.this,
+//							Arrays.asList("publish_actions"));
+//					request.setCallback(new StatusCallback() {
+//
+//						@Override
+//						public void call(Session session, SessionState state,
+//								Exception exception) {
+//							// TODO Auto-generated method stub
+//
+//						}
+//					});
+//
+//					Session.getActiveSession().requestNewPublishPermissions(
+//							request);
+//					return true;
+//				}
+//			} catch (Exception e) {
+//
+//			}
+//			DialogShare dialog=new DialogShare(DetailActivity.this, des, image, link, title);
+//			dialog.show();
+			shareWeb();
 			break;
 
 		case R.id.menu_like:
@@ -226,5 +207,55 @@ public class DetailActivity extends SherlockFragmentActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void shareWeb() {
+		Bundle params = new Bundle();
+		params.putString("name", title);
+		params.putString("caption", "Xem thêm");
+		params.putString("description", des);
+		params.putString("link",link);
+//		params.putString("picture", image);
+
+		WebDialog feedDialog = (new WebDialog.FeedDialogBuilder(DetailActivity.this,
+				Session.getActiveSession(), params)).setOnCompleteListener(
+				new OnCompleteListener() {
+
+					@Override
+					public void onComplete(Bundle values,
+							FacebookException error) {
+						if (error == null) {
+							// When the story is posted, echo the
+							// success
+							// and the post Id.
+							final String postId = values.getString("post_id");
+							if (postId != null) {
+//								Toast.makeText(DetailActivity.this,
+//										"Posted story, id: " + postId,
+//										Toast.LENGTH_SHORT).show();
+							} else {
+								// User clicked the Cancel button
+								Toast.makeText(
+										DetailActivity.this.getApplicationContext(),
+										"Publish cancelled", Toast.LENGTH_SHORT)
+										.show();
+							}
+						} else if (error instanceof FacebookOperationCanceledException) {
+							// User clicked the "x" button
+							Toast.makeText(
+									DetailActivity.this.getApplicationContext(),
+									"Publish cancelled", Toast.LENGTH_SHORT)
+									.show();
+						} else {
+							// Generic, ex: network error
+							Toast.makeText(
+									DetailActivity.this.getApplicationContext(),
+									"Error posting story", Toast.LENGTH_SHORT)
+									.show();
+						}
+					}
+
+				}).build();
+		feedDialog.show();
 	}
 }

@@ -14,7 +14,7 @@
         android:background="@drawable/list_bg"
         android:orientation="horizontal" >
 
-        <com.truongtvd.baohot.view.FadeInNetworkImageView
+        <com.appvn.baohot.view.FadeInNetworkImageView
             android:id="@+id/imgItem"
             android:layout_width="80dp"
             android:layout_height="80dp"

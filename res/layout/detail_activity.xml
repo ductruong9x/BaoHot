@@ -63,15 +63,14 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.google.ads.AdView
-        xmlns:app="http://schemas.android.com/apk/lib/com.google.ads"
+    <com.google.android.gms.ads.AdView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-6063844612770322/7095420890"
-        app:refreshInterval="30" />
+        app:adUnitId="ca-app-pub-1857950562418699/4548423966"/>
 
     <LinearLayout
         android:id="@+id/layout_web"

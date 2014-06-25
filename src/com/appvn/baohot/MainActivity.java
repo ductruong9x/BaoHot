@@ -22,8 +22,9 @@ import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.viewpagerindicator.PagerSlidingTabStrip;
 
 public class MainActivity extends SherlockFragmentActivity {
@@ -33,6 +34,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	private ViewPagerAdapter adapter;
 	private ActionBar actionBar;
 	private AdView adView;
+	private InterstitialAd interstitialAd;
+	private String UNIT_ID="ca-app-pub-1857950562418699/6025157164";
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -46,7 +49,10 @@ public class MainActivity extends SherlockFragmentActivity {
 				.parseColor("#7e3794")));
 		actionBar.setIcon(R.drawable.ic_actionbar);
 		adView = (AdView) findViewById(R.id.ad);
-		adView.loadAd(new AdRequest());
+		adView.loadAd(new AdRequest.Builder().build());
+		interstitialAd=new InterstitialAd(this);
+		interstitialAd.setAdUnitId(UNIT_ID);
+		interstitialAd.loadAd(new AdRequest.Builder().build());
 
 		vpMain = (ViewPager) findViewById(R.id.vpMain);
 		mIndicator = (PagerSlidingTabStrip) findViewById(R.id.indicatorTabHome);
@@ -278,6 +284,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		if (backPressedToExitOnce) {
+			interstitialAd.show();
 			super.onBackPressed();
 		} else {
 			this.backPressedToExitOnce = true;

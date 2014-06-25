@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -29,6 +30,7 @@ import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
+import com.google.android.gms.ads.AdView;
 import com.viewpagerindicator.PagerSlidingTabStrip;
 
 public class DetailActivity extends SherlockFragmentActivity {
@@ -40,12 +42,15 @@ public class DetailActivity extends SherlockFragmentActivity {
 	private ProgressDialog dialog, dialoglike;
 	private String link, title, des, image, post_id;
 	private int pos;
+	private AdView adView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		adView=(AdView)findViewById(R.id.ad);
+		adView.setVisibility(View.GONE);
 		actionBar = getSupportActionBar();
 		actionBar.setTitle(Html.fromHtml("<font color='#ffffff' size='25'>"
 				+ getString(R.string.app_name) + "</font>"));

@@ -21,8 +21,9 @@ import com.appvn.baohot.R;
 import com.appvn.baohot.network.MyVolley;
 import com.appvn.baohot.util.Util;
 import com.appvn.baohot.view.FadeInNetworkImageView;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 
 public class DetailFragment extends Fragment {
 
@@ -51,7 +52,7 @@ public class DetailFragment extends Fragment {
 		// TODO Auto-generated method stub
 		mParent = inflater.inflate(R.layout.detail_activity, null);
 		adView = (AdView) mParent.findViewById(R.id.adDetail);
-		adView.loadAd(new AdRequest());
+		adView.loadAd(new AdRequest.Builder().build());
 		tvTitle = (TextView) mParent.findViewById(R.id.tvTitle);
 		tvTime = (TextView) mParent.findViewById(R.id.tvTime);
 		tvDes = (TextView) mParent.findViewById(R.id.tvDes);

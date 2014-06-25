@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.appvn.baohot"
-    android:versionCode="9"
-    android:versionName="1.2.4" >
+    android:versionCode="1"
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -36,9 +36,12 @@
             android:name="ADMOB_ALLOW_LOCATION_FOR_ADS"
             android:value="true" >
         </meta-data>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.google.ads.AdActivity"
+            android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <meta-data
